@@ -5,7 +5,7 @@ import 'package:wall_app/firebase_options.dart';
 
 Future<void> configure() async {
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.ios,
+    options: DefaultFirebaseOptions.currentPlatform,
   );
 }
 

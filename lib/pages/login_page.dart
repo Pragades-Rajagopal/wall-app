@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:wall_app/components/button.dart';
+import 'package:wall_app/components/common.dart';
 import 'package:wall_app/components/text_field.dart';
 
 class LoginPage extends StatefulWidget {
@@ -13,6 +15,26 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
+
+  void signIn() async {
+    try {
+      showLoadingIndicator(context);
+      if (emailTextController.text.isNotEmpty &&
+          passwordTextController.text.isNotEmpty) {
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: emailTextController.text,
+          password: passwordTextController.text,
+        );
+      }
+      if (mounted) Navigator.pop(context);
+    } on FirebaseAuthException catch (error) {
+      if (mounted) {
+        Navigator.pop(context);
+        showSnackBar(context, error.code);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,9 +46,12 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(
-                  Icons.lock,
-                  size: 100.0,
+                const SizedBox(
+                  width: 96.0,
+                  height: 96.0,
+                  child: CircleAvatar(
+                    foregroundImage: AssetImage('assets/app_icon.png'),
+                  ),
                 ),
                 const SizedBox(height: 30.0),
                 Text(
@@ -48,7 +73,10 @@ class _LoginPageState extends State<LoginPage> {
                   obscureText: true,
                 ),
                 const SizedBox(height: 24.0),
-                const MyButton(text: 'Sign In'),
+                MyButton(
+                  text: 'Sign In',
+                  onTap: signIn,
+                ),
                 const SizedBox(height: 24.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
