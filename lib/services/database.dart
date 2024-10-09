@@ -9,3 +9,17 @@ class UserPost {
     });
   }
 }
+
+class SavedUserPost {
+  String? uid;
+  SavedUserPost({
+    this.uid,
+  });
+
+  Future<void> savePost(String postId) async {
+    await FirebaseFirestore.instance
+        .collection('saved_posts')
+        .doc(uid)
+        .set({"postIds": postId}, SetOptions(merge: true));
+  }
+}
