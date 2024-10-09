@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:wall_app/components/common.dart';
 import 'package:wall_app/components/icon_button.dart';
 import 'package:wall_app/components/text_field.dart';
 import 'package:wall_app/components/wall_post.dart';
+import 'package:wall_app/pages/my_post.dart';
 import 'package:wall_app/pages/saved_post.dart';
 import 'package:wall_app/services/database.dart';
 
@@ -43,6 +45,13 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  Future<void> saveUserPost(String postId) async {
+    await SavedUserPost(uid: currentUser?.uid).savePost(postId);
+    if (mounted) {
+      showSnackBar(context, 'POST SAVED', duration: 1);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,6 +78,23 @@ class _HomePageState extends State<HomePage> {
           children: [
             const DrawerHeader(
               child: Text('Actions'),
+            ),
+            TextButton(
+              onPressed: () {
+                _toggleDrawer();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const MyPost(),
+                  ),
+                );
+              },
+              child: const Text(
+                'My posts',
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
             ),
             TextButton(
               onPressed: () {
@@ -119,6 +145,8 @@ class _HomePageState extends State<HomePage> {
                             key: Key(post["message"]),
                             direction: DismissDirection.startToEnd,
                             confirmDismiss: (_) async {
+                              await saveUserPost(post.id);
+
                               return false;
                             },
                             background: Container(

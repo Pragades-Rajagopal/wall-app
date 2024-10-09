@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 
-void showSnackBar(BuildContext context, String message) {
+void showSnackBar(BuildContext context, String message, {duration = 3}) {
   ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message.split('-').join(' ').toUpperCase())));
+    SnackBar(
+      content: Text(
+        message.split('-').join(' ').toUpperCase(),
+      ),
+      duration: Duration(seconds: duration),
+    ),
+  );
 }
 
 void showLoadingIndicator(BuildContext context) {
