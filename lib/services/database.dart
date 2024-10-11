@@ -31,6 +31,15 @@ class UserPost {
   Stream<QuerySnapshot<Object?>> getAllPosts() {
     return userPostCollection.orderBy('time', descending: true).snapshots();
   }
+
+  Future<bool> deletePost(String postId) async {
+    try {
+      await userPostCollection.doc(postId).delete();
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 }
 
 /// Save for later class

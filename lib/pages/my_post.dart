@@ -32,6 +32,8 @@ class _MyPostState extends State<MyPost> {
                 stream:
                     UserPost(email: currentUser!.email).getUserPostsByEmail(),
                 noDataMessage: 'You have not posted yet!',
+                isDismissableAction: true,
+                dismissAction: 'deletePost',
               ),
             ),
           ],
