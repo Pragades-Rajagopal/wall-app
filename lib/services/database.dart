@@ -32,6 +32,7 @@ class UserPost {
     return userPostCollection.orderBy('time', descending: true).snapshots();
   }
 
+  // Delete an user post
   Future<bool> deletePost(String postId) async {
     try {
       await userPostCollection.doc(postId).delete();
@@ -54,6 +55,18 @@ class SaveUserPost {
     await savedPostCollection.doc(uid).set(
       {
         "postIds": FieldValue.arrayUnion([postId])
+      },
+      SetOptions(
+        merge: true,
+      ),
+    );
+  }
+
+  // Unsave saved post for later
+  Future<void> deletePost(String postId) async {
+    await savedPostCollection.doc(uid).set(
+      {
+        "postIds": FieldValue.arrayRemove([postId])
       },
       SetOptions(
         merge: true,

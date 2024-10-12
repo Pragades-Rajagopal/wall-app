@@ -46,10 +46,13 @@ class _HomePageState extends State<HomePage> {
       key: _scaffoldState,
       extendBodyBehindAppBar: true,
       backgroundColor: Colors.grey[300],
-      appBar: const MyAppBar(title: 'WALL'),
+      appBar: const MyAppBar(
+        title: 'WALL',
+        showMoreOptions: true,
+      ),
       drawer: MyDrawer(scaffoldState: _scaffoldState),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 12, 12, 24),
+        padding: const EdgeInsets.fromLTRB(12, 12, 12, 16),
         child: Column(
           children: [
             Expanded(
@@ -77,7 +80,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   _showSaveLoadingIndicator
                       ? Container(
-                          padding: const EdgeInsets.all(8),
+                          padding: const EdgeInsets.all(6),
                           child: const CircularProgressIndicator(
                             color: Colors.black,
                             strokeWidth: 4.0,
@@ -92,9 +95,9 @@ class _HomePageState extends State<HomePage> {
                           ),
                           child: MyIconButton(
                             onPressed: postMessage,
-                            icon: Icons.arrow_circle_up,
+                            icon: Icons.send,
                             color: Colors.white70,
-                            iconSize: 36.0,
+                            iconSize: 28.0,
                           ),
                         ),
                 ],

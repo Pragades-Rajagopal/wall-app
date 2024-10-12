@@ -21,7 +21,7 @@ class _SavedPostState extends State<SavedPost> {
       backgroundColor: Colors.grey[300],
       appBar: const MyAppBar(
         title: 'SAVED POSTS',
-        showBackButton: false,
+        showMoreOptions: false,
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(12, 12, 12, 24),
@@ -32,6 +32,8 @@ class _SavedPostState extends State<SavedPost> {
                 stream:
                     SaveUserPost(uid: currentUser!.uid).getSavedPostsByUser(),
                 noDataMessage: 'There are no saved posts!',
+                isDismissableAction: true,
+                dismissAction: 'unsaveSavedPost',
               ),
             ),
           ],

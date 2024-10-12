@@ -24,11 +24,19 @@ class MyStreamBuilder extends StatefulWidget {
 
 class _MyStreamBuilderState extends State<MyStreamBuilder> {
   final currentUser = FirebaseAuth.instance.currentUser;
+  Widget? dismissableBg;
 
   Future<void> saveUserPost(String postId) async {
     await SaveUserPost(uid: currentUser?.uid).savePost(postId);
     if (mounted) {
       showSnackBar(context, 'POST SAVED', duration: 1);
+    }
+  }
+
+  Future<void> deleteSavedUserPost(String postId) async {
+    await SaveUserPost(uid: currentUser?.uid).deletePost(postId);
+    if (mounted) {
+      showSnackBar(context, 'POST UNSAVED', duration: 1);
     }
   }
 
@@ -41,6 +49,23 @@ class _MyStreamBuilderState extends State<MyStreamBuilder> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.dismissAction == 'saveUserPost') {
+      dismissableBg = dismissableBackground(
+        Colors.black38,
+        Icons.bookmark,
+      );
+    } else if (widget.dismissAction == 'deleteUserPost') {
+      dismissableBg = dismissableBackground(
+        Colors.red,
+        Icons.delete,
+      );
+    } else if (widget.dismissAction == 'unsaveSavedPost') {
+      dismissableBg = dismissableBackground(
+        Colors.black26,
+        Icons.bookmark_remove,
+      );
+    }
+
     return StreamBuilder(
       stream: widget.stream,
       builder: (context, snapshot) {
@@ -53,8 +78,11 @@ class _MyStreamBuilderState extends State<MyStreamBuilder> {
           );
         }
         if (snapshot.hasError) {
-          return Center(
-            child: Text('Error: ${snapshot.error}'),
+          return const Center(
+            child: Text(
+              'Something went wrong!\nTry again after sometime.',
+              textAlign: TextAlign.center,
+            ),
           );
         }
         if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
@@ -69,33 +97,16 @@ class _MyStreamBuilderState extends State<MyStreamBuilder> {
                   confirmDismiss: (_) async {
                     if (widget.dismissAction == 'saveUserPost') {
                       saveUserPost(post.id);
-                    } else if (widget.dismissAction == 'deletePost') {
+                    } else if (widget.dismissAction == 'deleteUserPost') {
                       deleteUserPost(post.id);
+                      return true;
+                    } else if (widget.dismissAction == 'unsaveSavedPost') {
+                      deleteSavedUserPost(post.id);
+                      return true;
                     }
                     return false;
                   },
-                  background: Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.black38,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(8),
-                      ),
-                    ),
-                    margin: const EdgeInsets.fromLTRB(12, 12, 12, 0),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.all(18.0),
-                          child: Icon(
-                            Icons.bookmark,
-                            color: Colors.white,
-                            size: 28.0,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
+                  background: dismissableBg,
                   child: WallPost(
                     message: post["message"],
                     user: post["email"],
@@ -117,6 +128,31 @@ class _MyStreamBuilderState extends State<MyStreamBuilder> {
           );
         }
       },
+    );
+  }
+
+  Container dismissableBackground(Color bgColor, IconData actionIcon) {
+    return Container(
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: const BorderRadius.all(
+          Radius.circular(8),
+        ),
+      ),
+      margin: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(18.0),
+            child: Icon(
+              actionIcon,
+              color: Colors.white,
+              size: 28.0,
+            ),
+          )
+        ],
+      ),
     );
   }
 }
