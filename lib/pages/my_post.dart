@@ -18,7 +18,7 @@ class _MyPostState extends State<MyPost> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      backgroundColor: Colors.grey[300],
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: const MyAppBar(
         title: 'MY POSTS',
         showMoreOptions: false,

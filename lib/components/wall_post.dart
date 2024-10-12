@@ -16,9 +16,9 @@ class WallPost extends StatelessWidget {
   Widget build(BuildContext context) {
     final timestamp = time.toDate();
     return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.all(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.primaryContainer,
+        borderRadius: const BorderRadius.all(
           Radius.circular(8),
         ),
       ),
@@ -29,12 +29,12 @@ class WallPost extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.grey[400],
+              color: Theme.of(context).colorScheme.tertiary,
             ),
             padding: const EdgeInsets.all(10),
-            child: const Icon(
+            child: Icon(
               Icons.person,
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.primary,
             ),
           ),
           const SizedBox(
@@ -61,7 +61,7 @@ class WallPost extends StatelessWidget {
                       child: Text(
                         user,
                         style: TextStyle(
-                          color: Colors.grey[600],
+                          color: Theme.of(context).colorScheme.secondary,
                         ),
                       ),
                     ),
@@ -69,7 +69,7 @@ class WallPost extends StatelessWidget {
                       child: Text(
                         '${timestamp.day}/${timestamp.month} ${timestamp.hour}:${timestamp.minute}',
                         style: TextStyle(
-                          color: Colors.grey[600],
+                          color: Theme.of(context).colorScheme.secondary,
                         ),
                       ),
                     ),

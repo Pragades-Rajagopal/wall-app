@@ -70,9 +70,9 @@ class _MyStreamBuilderState extends State<MyStreamBuilder> {
       stream: widget.stream,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
+          return Center(
             child: CircularProgressIndicator(
-              color: Colors.black,
+              color: Theme.of(context).colorScheme.surfaceBright,
               strokeWidth: 6.0,
             ),
           );

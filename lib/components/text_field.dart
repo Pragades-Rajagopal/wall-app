@@ -18,18 +18,20 @@ class MyTextField extends StatelessWidget {
       obscureText: obscureText,
       decoration: InputDecoration(
         hintText: hintText,
-        enabledBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white),
-          borderRadius: BorderRadius.all(Radius.circular(12.0)),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
+          borderRadius: const BorderRadius.all(Radius.circular(12.0)),
         ),
-        focusedBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white),
-          borderRadius: BorderRadius.all(Radius.circular(12.0)),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
+          borderRadius: const BorderRadius.all(Radius.circular(12.0)),
         ),
-        fillColor: Colors.white,
+        fillColor: Theme.of(context).colorScheme.primary,
         filled: true,
-        hintStyle: TextStyle(color: Colors.grey.shade500),
+        focusColor: Theme.of(context).colorScheme.surfaceBright,
+        hintStyle: TextStyle(color: Theme.of(context).colorScheme.tertiary),
       ),
+      cursorColor: Theme.of(context).colorScheme.surfaceBright,
     );
   }
 }

@@ -18,7 +18,7 @@ class _SavedPostState extends State<SavedPost> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      backgroundColor: Colors.grey[300],
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: const MyAppBar(
         title: 'SAVED POSTS',
         showMoreOptions: false,

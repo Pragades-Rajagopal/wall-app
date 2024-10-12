@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:wall_app/auth/auth.dart';
 import 'package:wall_app/firebase_options.dart';
+import 'package:wall_app/utils/themes.dart';
 
 Future<void> configure() async {
   await Firebase.initializeApp(
@@ -20,9 +21,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: AuthPage(),
+      themeMode: ThemeMode.system,
+      darkTheme: darkTheme,
+      theme: lightTheme,
+      home: const AuthPage(),
     );
   }
 }

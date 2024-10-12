@@ -25,18 +25,15 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0.0,
       title: Text(
         title,
-        style: const TextStyle(
-          color: Colors.black,
-          fontWeight: FontWeight.bold,
-        ),
+        style: Theme.of(context).appBarTheme.titleTextStyle,
       ),
       centerTitle: true,
-      backgroundColor: Colors.grey[300]!.withOpacity(0.97),
+      backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
       actions: showMoreOptions
           ? [
               PopupMenuButton(
                 tooltip: 'More options',
-                color: Colors.grey.shade200,
+                color: Theme.of(context).colorScheme.primary,
                 menuPadding: const EdgeInsets.all(4),
                 icon: const Icon(Icons.more_horiz_outlined),
                 onSelected: (value) {

@@ -45,7 +45,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       key: _scaffoldState,
       extendBodyBehindAppBar: true,
-      backgroundColor: Colors.grey[300],
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: const MyAppBar(
         title: 'WALL',
         showMoreOptions: true,
@@ -56,8 +56,6 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: [
             Expanded(
-              // stream: UserPost().getAllPosts(),
-
               child: MyStreamBuilder(
                 stream: UserPost().getAllPosts(),
                 noDataMessage: '',
@@ -81,8 +79,8 @@ class _HomePageState extends State<HomePage> {
                   _showSaveLoadingIndicator
                       ? Container(
                           padding: const EdgeInsets.all(6),
-                          child: const CircularProgressIndicator(
-                            color: Colors.black,
+                          child: CircularProgressIndicator(
+                            color: Theme.of(context).colorScheme.surfaceBright,
                             strokeWidth: 4.0,
                           ),
                         )

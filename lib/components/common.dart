@@ -14,9 +14,9 @@ void showSnackBar(BuildContext context, String message, {duration = 3}) {
 void showLoadingIndicator(BuildContext context) {
   showDialog(
     context: context,
-    builder: (context) => const Center(
+    builder: (context) => Center(
       child: CircularProgressIndicator(
-        color: Colors.black,
+        color: Theme.of(context).colorScheme.surfaceBright,
       ),
     ),
   );
