@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:wall_app/pages/my_post.dart';
@@ -51,12 +52,18 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                         builder: (context) => const SavedPost(),
                       ),
                     );
+                  } else if (value == 'Change Theme') {
+                    if (AdaptiveTheme.of(context).mode.isDark) {
+                      AdaptiveTheme.of(context).setLight();
+                    } else {
+                      AdaptiveTheme.of(context).setDark();
+                    }
                   } else if (value == 'Logout') {
                     signOut();
                   }
                 },
                 itemBuilder: (BuildContext context) {
-                  return {'My Posts', 'Saved Posts', 'Logout'}
+                  return {'My Posts', 'Saved Posts', 'Change Theme', 'Logout'}
                       .map((String choice) {
                     return PopupMenuItem<String>(
                       value: choice,
