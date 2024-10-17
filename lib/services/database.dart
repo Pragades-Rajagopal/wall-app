@@ -16,6 +16,7 @@ class UserPost {
       "message": message,
       "email": userEmail ?? '',
       "time": Timestamp.now(),
+      "likes": [],
     });
   }
 
@@ -39,6 +40,20 @@ class UserPost {
       return true;
     } catch (e) {
       return false;
+    }
+  }
+
+  /// Like an user post
+  void likePost(String postId, String email, bool isLiked) {
+    DocumentReference docRef = userPostCollection.doc(postId);
+    if (isLiked) {
+      docRef.update({
+        "likes": FieldValue.arrayUnion([email])
+      });
+    } else {
+      docRef.update({
+        "likes": FieldValue.arrayRemove([email])
+      });
     }
   }
 }

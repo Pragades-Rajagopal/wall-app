@@ -111,6 +111,8 @@ class _MyStreamBuilderState extends State<MyStreamBuilder> {
                     message: post["message"],
                     user: post["email"],
                     time: post["time"],
+                    postId: post.id,
+                    likes: List<String>.from(post["likes"] ?? []),
                   ),
                 );
               } else {
@@ -118,6 +120,8 @@ class _MyStreamBuilderState extends State<MyStreamBuilder> {
                   message: post["message"],
                   user: post["email"],
                   time: post["time"],
+                  postId: post.id,
+                  likes: List<String>.from(post["likes"] ?? []),
                 );
               }
             },

@@ -1,20 +1,46 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:wall_app/components/like_button.dart';
+import 'package:wall_app/services/database.dart';
 
-class WallPost extends StatelessWidget {
+class WallPost extends StatefulWidget {
   final String message;
   final String user;
   final Timestamp time;
+  final String postId;
+  final List<String> likes;
   const WallPost({
     super.key,
     required this.message,
     required this.user,
     required this.time,
+    required this.postId,
+    required this.likes,
   });
 
   @override
+  State<WallPost> createState() => _WallPostState();
+}
+
+class _WallPostState extends State<WallPost> {
+  final currentUser = FirebaseAuth.instance.currentUser;
+  bool isLiked = false;
+
+  @override
+  void initState() {
+    super.initState();
+    isLiked = widget.likes.contains(currentUser?.email);
+  }
+
+  void likePost() {
+    setState(() => isLiked = !isLiked);
+    UserPost().likePost(widget.postId, currentUser!.email!, isLiked);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final timestamp = time.toDate();
+    final timestamp = widget.time.toDate();
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primaryContainer,
@@ -23,18 +49,27 @@ class WallPost extends StatelessWidget {
         ),
       ),
       margin: const EdgeInsets.fromLTRB(12, 12, 12, 0),
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(16),
       child: Row(
         children: [
           Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Theme.of(context).colorScheme.tertiary,
-            ),
-            padding: const EdgeInsets.all(10),
-            child: Icon(
-              Icons.person,
-              color: Theme.of(context).colorScheme.primary,
+            padding: const EdgeInsets.fromLTRB(4, 0, 8, 0),
+            child: Column(
+              children: [
+                LikeButton(
+                  isLiked: isLiked,
+                  onTap: likePost,
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
+                Text(
+                  widget.likes.length.toString(),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                ),
+              ],
             ),
           ),
           const SizedBox(
@@ -45,7 +80,7 @@ class WallPost extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  message,
+                  widget.message,
                   style: const TextStyle(
                     fontSize: 18,
                   ),
@@ -59,7 +94,7 @@ class WallPost extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        user,
+                        widget.user,
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.secondary,
                         ),
