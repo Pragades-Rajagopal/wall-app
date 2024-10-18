@@ -1,9 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+final CollectionReference userCollection =
+    FirebaseFirestore.instance.collection('users');
 final CollectionReference userPostCollection =
     FirebaseFirestore.instance.collection('user_posts');
 final CollectionReference savedPostCollection =
     FirebaseFirestore.instance.collection('saved_posts');
+
+class Users {
+  String? email;
+  Users({this.email});
+  Stream<DocumentSnapshot> getInfo() {
+    return userCollection.doc(email).snapshots();
+  }
+
+  Future<void> updateInfo(String field, String value) async {
+    await userCollection.doc(email).update({field: value});
+  }
+}
 
 /// User post class
 class UserPost {

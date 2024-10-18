@@ -29,7 +29,9 @@ class MyTextField extends StatelessWidget {
         fillColor: Theme.of(context).colorScheme.primary,
         filled: true,
         focusColor: Theme.of(context).colorScheme.surfaceBright,
-        hintStyle: TextStyle(color: Theme.of(context).colorScheme.tertiary),
+        hintStyle: TextStyle(
+          color: Theme.of(context).colorScheme.tertiary,
+        ),
       ),
       cursorColor: Theme.of(context).colorScheme.surfaceBright,
     );

@@ -30,7 +30,9 @@ class _WallPostState extends State<WallPost> {
   @override
   void initState() {
     super.initState();
-    isLiked = widget.likes.contains(currentUser?.email);
+    setState(() {
+      isLiked = widget.likes.contains(currentUser?.email);
+    });
   }
 
   void likePost() {

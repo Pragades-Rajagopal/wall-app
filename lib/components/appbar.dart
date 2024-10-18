@@ -2,6 +2,7 @@ import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:wall_app/pages/my_post.dart';
+import 'package:wall_app/pages/profile_page.dart';
 import 'package:wall_app/pages/saved_post.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -52,6 +53,13 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                         builder: (context) => const SavedPost(),
                       ),
                     );
+                  } else if (value == 'Profile') {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ProfilePage(),
+                      ),
+                    );
                   } else if (value == 'Change Theme') {
                     if (AdaptiveTheme.of(context).mode.isDark) {
                       AdaptiveTheme.of(context).setLight();
@@ -63,8 +71,13 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                   }
                 },
                 itemBuilder: (BuildContext context) {
-                  return {'My Posts', 'Saved Posts', 'Change Theme', 'Logout'}
-                      .map((String choice) {
+                  return {
+                    'My Posts',
+                    'Saved Posts',
+                    'Profile',
+                    'Change Theme',
+                    'Logout'
+                  }.map((String choice) {
                     return PopupMenuItem<String>(
                       value: choice,
                       child: Text(choice),
