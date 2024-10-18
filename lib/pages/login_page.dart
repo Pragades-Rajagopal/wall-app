@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:wall_app/components/button.dart';
 import 'package:wall_app/components/common.dart';
 import 'package:wall_app/components/text_field.dart';
+import 'package:wall_app/services/authentication.dart';
 
 class LoginPage extends StatefulWidget {
   final Function()? onTap;
@@ -21,9 +22,9 @@ class _LoginPageState extends State<LoginPage> {
       showLoadingIndicator(context);
       if (emailTextController.text.isNotEmpty &&
           passwordTextController.text.isNotEmpty) {
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: emailTextController.text,
-          password: passwordTextController.text,
+        await Authentication().signIn(
+          emailTextController.text,
+          passwordTextController.text,
         );
       }
       if (mounted) Navigator.pop(context);

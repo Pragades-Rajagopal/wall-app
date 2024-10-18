@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:wall_app/components/button.dart';
 import 'package:wall_app/components/common.dart';
 import 'package:wall_app/components/text_field.dart';
+import 'package:wall_app/services/authentication.dart';
 
 class RegisterPage extends StatefulWidget {
   final Function()? onTap;
@@ -28,9 +29,9 @@ class _RegisterPageState extends State<RegisterPage> {
       if (emailTextController.text.isNotEmpty &&
           passwordTextController.text.isNotEmpty &&
           confirmPasswordTextController.text.isNotEmpty) {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: emailTextController.text,
-          password: passwordTextController.text,
+        await Authentication().register(
+          emailTextController.text,
+          passwordTextController.text,
         );
       }
       if (mounted) Navigator.pop(context);
