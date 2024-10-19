@@ -17,6 +17,16 @@ class Users {
   Future<void> updateInfo(String field, String value) async {
     await userCollection.doc(email).update({field: value});
   }
+
+  Future<String> getUsername() async {
+    final userInfo = await userCollection.doc(email).get();
+    if (userInfo.exists) {
+      final username = userInfo.data() as Map<String, dynamic>;
+      return username["username"] as String;
+    } else {
+      return '';
+    }
+  }
 }
 
 /// User post class
