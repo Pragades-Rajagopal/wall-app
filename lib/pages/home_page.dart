@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:wall_app/components/appbar.dart';
-import 'package:wall_app/components/drawer.dart';
 import 'package:wall_app/components/icon_button.dart';
 import 'package:wall_app/components/stream_builder.dart';
 import 'package:wall_app/components/text_field.dart';
@@ -50,7 +49,7 @@ class _HomePageState extends State<HomePage> {
         title: 'WALL',
         showMoreOptions: true,
       ),
-      drawer: MyDrawer(scaffoldState: _scaffoldState),
+      // drawer: MyDrawer(scaffoldState: _scaffoldState),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(12, 12, 12, 16),
         child: Column(
@@ -60,6 +59,7 @@ class _HomePageState extends State<HomePage> {
                 stream: UserPost().getAllPosts(),
                 noDataMessage: '',
                 isDismissableAction: true,
+                optionalStream: Users().getUsername(),
               ),
             ),
             Padding(

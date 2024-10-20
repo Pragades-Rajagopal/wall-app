@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:wall_app/components/like_button.dart';
+import 'package:wall_app/helpers/helper_functions.dart';
 import 'package:wall_app/services/database.dart';
 
 class WallPost extends StatefulWidget {
@@ -42,7 +43,6 @@ class _WallPostState extends State<WallPost> {
 
   @override
   Widget build(BuildContext context) {
-    final timestamp = widget.time.toDate();
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primaryContainer,
@@ -51,7 +51,7 @@ class _WallPostState extends State<WallPost> {
         ),
       ),
       margin: const EdgeInsets.fromLTRB(12, 12, 12, 0),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(16, 16, 20, 16),
       child: Row(
         children: [
           Container(
@@ -102,12 +102,10 @@ class _WallPostState extends State<WallPost> {
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: Text(
-                        '${timestamp.day}/${timestamp.month} ${timestamp.hour}:${timestamp.minute}',
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.secondary,
-                        ),
+                    Text(
+                      getFormattedTime(widget.time),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.secondary,
                       ),
                     ),
                   ],

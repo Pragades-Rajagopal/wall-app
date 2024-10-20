@@ -45,6 +45,7 @@ class _ProfilePageState extends State<ProfilePage> {
             filled: true,
             fillColor: Theme.of(context).colorScheme.primary,
           ),
+          cursorColor: Theme.of(context).colorScheme.surfaceBright,
         ),
         actions: [
           TextButton(

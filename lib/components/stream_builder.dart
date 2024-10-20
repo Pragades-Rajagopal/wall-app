@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:wall_app/components/common.dart';
 import 'package:wall_app/components/wall_post.dart';
+import 'package:wall_app/helpers/helper_functions.dart';
+import 'package:wall_app/pages/post_page.dart';
 import 'package:wall_app/services/database.dart';
 
 class MyStreamBuilder extends StatefulWidget {
@@ -10,12 +12,14 @@ class MyStreamBuilder extends StatefulWidget {
   final String noDataMessage;
   final bool isDismissableAction;
   final String dismissAction;
+  final Stream<QuerySnapshot<Object?>> optionalStream;
   const MyStreamBuilder({
     super.key,
     required this.stream,
     required this.noDataMessage,
     this.isDismissableAction = false,
     this.dismissAction = 'saveUserPost',
+    this.optionalStream = const Stream.empty(),
   });
 
   @override
@@ -86,49 +90,103 @@ class _MyStreamBuilderState extends State<MyStreamBuilder> {
           );
         }
         if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
-          return ListView.builder(
-            itemCount: snapshot.data!.docs.length,
-            itemBuilder: (context, index) {
-              final post = snapshot.data!.docs[index];
-              if (widget.isDismissableAction) {
-                return Dismissible(
-                  key: Key(post["message"]),
-                  direction: DismissDirection.startToEnd,
-                  confirmDismiss: (_) async {
-                    if (widget.dismissAction == 'saveUserPost') {
-                      saveUserPost(post.id);
-                    } else if (widget.dismissAction == 'deleteUserPost') {
-                      deleteUserPost(post.id);
-                      return true;
-                    } else if (widget.dismissAction == 'unsaveSavedPost') {
-                      deleteSavedUserPost(post.id);
-                      return true;
-                    }
-                    return false;
-                  },
-                  background: dismissableBg,
-                  child: WallPost(
-                    message: post["message"],
-                    user: post["email"],
-                    time: post["time"],
-                    postId: post.id,
-                    likes: List<String>.from(post["likes"] ?? []),
-                  ),
-                );
-              } else {
-                return WallPost(
-                  message: post["message"],
-                  user: post["email"],
-                  time: post["time"],
-                  postId: post.id,
-                  likes: List<String>.from(post["likes"] ?? []),
-                );
-              }
-            },
-          );
+          return StreamBuilder(
+              stream: Users(email: currentUser!.email).getUsername(),
+              builder: (context, optSnapshot) {
+                if (optSnapshot.hasData) {
+                  return listViewBuilder(snapshot, optSnapshot);
+                }
+                return listViewBuilder(snapshot);
+              });
         } else {
           return Center(
             child: Text(widget.noDataMessage),
+          );
+        }
+      },
+    );
+  }
+
+  ListView listViewBuilder(
+    AsyncSnapshot<QuerySnapshot<Object?>> snapshot, [
+    AsyncSnapshot<QuerySnapshot<Object?>>? optSnapshot,
+  ]) {
+    String? username;
+    return ListView.builder(
+      itemCount: snapshot.data!.docs.length,
+      itemBuilder: (context, index) {
+        final post = snapshot.data!.docs[index];
+        if (optSnapshot?.hasData == true) {
+          for (var e in optSnapshot!.data!.docs) {
+            if (e.id == post["email"]) {
+              username = e.get('username');
+            }
+          }
+        }
+        if (widget.isDismissableAction) {
+          return Dismissible(
+            key: Key(post.id),
+            direction: DismissDirection.startToEnd,
+            confirmDismiss: (_) async {
+              if (widget.dismissAction == 'saveUserPost') {
+                saveUserPost(post.id);
+              } else if (widget.dismissAction == 'deleteUserPost') {
+                deleteUserPost(post.id);
+                return true;
+              } else if (widget.dismissAction == 'unsaveSavedPost') {
+                deleteSavedUserPost(post.id);
+                return true;
+              }
+              return false;
+            },
+            background: dismissableBg,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PostPage(
+                      postId: post.id,
+                      message: post["message"],
+                      user: post["email"],
+                      time: getFormattedTime(post["time"]),
+                      likes: List<String>.from(post["likes"] ?? []),
+                    ),
+                  ),
+                );
+              },
+              child: WallPost(
+                message: post["message"],
+                user: username ?? post["email"],
+                time: post["time"],
+                postId: post.id,
+                likes: List<String>.from(post["likes"] ?? []),
+              ),
+            ),
+          );
+        } else {
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PostPage(
+                    postId: post.id,
+                    message: post["message"],
+                    user: post["email"],
+                    time: getFormattedTime(post["time"]),
+                    likes: List<String>.from(post["likes"] ?? []),
+                  ),
+                ),
+              );
+            },
+            child: WallPost(
+              message: post["message"],
+              user: username ?? post["email"],
+              time: post["time"],
+              postId: post.id,
+              likes: List<String>.from(post["likes"] ?? []),
+            ),
           );
         }
       },

@@ -22,6 +22,8 @@ class MyIconButton extends StatelessWidget {
         color: color,
       ),
       iconSize: iconSize,
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
     );
   }
 }

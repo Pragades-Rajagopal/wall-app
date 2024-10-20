@@ -6,26 +6,27 @@ final CollectionReference userPostCollection =
     FirebaseFirestore.instance.collection('user_posts');
 final CollectionReference savedPostCollection =
     FirebaseFirestore.instance.collection('saved_posts');
+final CollectionReference commentCollection =
+    FirebaseFirestore.instance.collection('comments');
 
+/// User profile class
 class Users {
   String? email;
   Users({this.email});
+
+  /// Get user info by email
   Stream<DocumentSnapshot> getInfo() {
     return userCollection.doc(email).snapshots();
   }
 
+  /// Update user info
   Future<void> updateInfo(String field, String value) async {
     await userCollection.doc(email).update({field: value});
   }
 
-  Future<String> getUsername() async {
-    final userInfo = await userCollection.doc(email).get();
-    if (userInfo.exists) {
-      final username = userInfo.data() as Map<String, dynamic>;
-      return username["username"] as String;
-    } else {
-      return '';
-    }
+  /// Get all username
+  Stream<QuerySnapshot<Object?>> getUsername() {
+    return userCollection.snapshots();
   }
 }
 
@@ -48,7 +49,7 @@ class UserPost {
   Stream<QuerySnapshot<Object?>> getUserPostsByEmail() {
     return userPostCollection
         .where('email', isEqualTo: email)
-        // .orderBy('time', descending: true)
+        .orderBy('time', descending: true)
         .snapshots();
   }
 
@@ -134,6 +135,30 @@ class SaveUserPost {
     yield* userPostCollection
         .where(FieldPath.documentId, whereIn: savedPostIds)
         .orderBy('time', descending: true)
+        .snapshots();
+  }
+}
+
+/// Comment for post
+class Comment {
+  String postId;
+  Comment(this.postId);
+
+  /// Add comment to a post
+  Future<void> addComment(String comment, String commentedBy) async {
+    await userPostCollection.doc(postId).collection('comments').add({
+      "comment": comment,
+      "commentedBy": commentedBy,
+      "commentedAt": Timestamp.now(),
+    });
+  }
+
+  /// Get comments for a post
+  Stream<QuerySnapshot<Object?>> getCommentsForPost() {
+    return userPostCollection
+        .doc(postId)
+        .collection('comments')
+        .orderBy('commentedAt', descending: true)
         .snapshots();
   }
 }
