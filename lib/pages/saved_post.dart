@@ -21,7 +21,7 @@ class _SavedPostState extends State<SavedPost> {
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: const MyAppBar(
         title: 'SAVED POSTS',
-        showMoreOptions: false,
+        showBackButton: true,
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(12, 12, 12, 24),

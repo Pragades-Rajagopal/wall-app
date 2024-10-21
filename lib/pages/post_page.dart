@@ -42,9 +42,10 @@ class _PostPageState extends State<PostPage> {
   void postComment() async {
     if (commentTextController.text.isNotEmpty) {
       _toggleSaveLoadingIndicator();
+      String? username = await Users(email: currentUser!.email!).getUsername();
       await Comment(widget.postId).addComment(
         commentTextController.text,
-        currentUser!.email!,
+        username,
       );
       setState(() {
         commentTextController.text = '';
@@ -61,6 +62,7 @@ class _PostPageState extends State<PostPage> {
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: const MyAppBar(
         title: 'POST',
+        showBackButton: true,
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(12, 12, 12, 16),

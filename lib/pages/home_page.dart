@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage> {
                 stream: UserPost().getAllPosts(),
                 noDataMessage: '',
                 isDismissableAction: true,
-                optionalStream: Users().getUsername(),
+                optionalStream: Users().getAllUsernames(),
               ),
             ),
             Padding(

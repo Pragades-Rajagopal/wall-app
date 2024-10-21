@@ -91,7 +91,7 @@ class _MyStreamBuilderState extends State<MyStreamBuilder> {
         }
         if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
           return StreamBuilder(
-              stream: Users(email: currentUser!.email).getUsername(),
+              stream: Users(email: currentUser!.email).getAllUsernames(),
               builder: (context, optSnapshot) {
                 if (optSnapshot.hasData) {
                   return listViewBuilder(snapshot, optSnapshot);
@@ -112,6 +112,7 @@ class _MyStreamBuilderState extends State<MyStreamBuilder> {
     AsyncSnapshot<QuerySnapshot<Object?>>? optSnapshot,
   ]) {
     String? username;
+    List<String?> usernames = [];
     return ListView.builder(
       itemCount: snapshot.data!.docs.length,
       itemBuilder: (context, index) {
@@ -120,6 +121,7 @@ class _MyStreamBuilderState extends State<MyStreamBuilder> {
           for (var e in optSnapshot!.data!.docs) {
             if (e.id == post["email"]) {
               username = e.get('username');
+              usernames.add(username!);
             }
           }
         }
@@ -148,7 +150,7 @@ class _MyStreamBuilderState extends State<MyStreamBuilder> {
                     builder: (context) => PostPage(
                       postId: post.id,
                       message: post["message"],
-                      user: post["email"],
+                      user: usernames[index] ?? post["email"],
                       time: getFormattedTime(post["time"]),
                       likes: List<String>.from(post["likes"] ?? []),
                     ),
@@ -173,7 +175,7 @@ class _MyStreamBuilderState extends State<MyStreamBuilder> {
                   builder: (context) => PostPage(
                     postId: post.id,
                     message: post["message"],
-                    user: post["email"],
+                    user: usernames[index] ?? post["email"],
                     time: getFormattedTime(post["time"]),
                     likes: List<String>.from(post["likes"] ?? []),
                   ),

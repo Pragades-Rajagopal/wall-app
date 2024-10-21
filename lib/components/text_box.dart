@@ -45,6 +45,7 @@ class MyTextBox extends StatelessWidget {
                 onPressed: onPressed,
                 icon: Icons.settings,
                 color: Theme.of(context).colorScheme.secondary,
+                iconSize: 22,
               )
             ],
           ),

@@ -85,7 +85,10 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar: const MyAppBar(title: 'PROFILE'),
+      appBar: const MyAppBar(
+        title: 'PROFILE',
+        showBackButton: true,
+      ),
       body: StreamBuilder(
         stream: Users(email: currentUser!.email!).getInfo(),
         builder: (context, snapshot) {
@@ -97,7 +100,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 const SizedBox(height: 24),
                 const Icon(
                   Icons.person,
-                  size: 72,
+                  size: 64,
                 ),
                 const SizedBox(height: 12),
                 Text(

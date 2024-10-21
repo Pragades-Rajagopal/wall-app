@@ -21,7 +21,7 @@ class _MyPostState extends State<MyPost> {
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: const MyAppBar(
         title: 'MY POSTS',
-        showMoreOptions: false,
+        showBackButton: true,
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(12, 12, 12, 24),
@@ -34,7 +34,7 @@ class _MyPostState extends State<MyPost> {
                 noDataMessage: 'You have not posted yet!',
                 isDismissableAction: true,
                 dismissAction: 'deleteUserPost',
-                optionalStream: Users().getUsername(),
+                optionalStream: Users().getAllUsernames(),
               ),
             ),
           ],
