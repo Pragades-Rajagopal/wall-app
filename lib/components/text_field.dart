@@ -16,44 +16,34 @@ class MyTextField extends StatefulWidget {
 }
 
 class _MyTextFieldState extends State<MyTextField> {
-  bool autoEdit = false;
-
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      behavior: HitTestBehavior.translucent,
-      onTap: () => setState(() => autoEdit = true),
-      child: TextField(
-        controller: widget.controller,
-        enabled: autoEdit,
-        onTapOutside: (_) => setState(() => autoEdit = false),
-        obscureText: widget.obscureText,
-        decoration: InputDecoration(
-          hintText: widget.hintText,
-          enabledBorder: OutlineInputBorder(
-            borderSide:
-                BorderSide(color: Theme.of(context).colorScheme.primary),
-            borderRadius: const BorderRadius.all(Radius.circular(12.0)),
-          ),
-          disabledBorder: OutlineInputBorder(
-            borderSide:
-                BorderSide(color: Theme.of(context).colorScheme.primary),
-            borderRadius: const BorderRadius.all(Radius.circular(12.0)),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide:
-                BorderSide(color: Theme.of(context).colorScheme.primary),
-            borderRadius: const BorderRadius.all(Radius.circular(12.0)),
-          ),
-          fillColor: Theme.of(context).colorScheme.primary,
-          filled: true,
-          focusColor: Theme.of(context).colorScheme.surfaceBright,
-          hintStyle: TextStyle(
-            color: Theme.of(context).colorScheme.tertiary,
-          ),
+    return TextField(
+      controller: widget.controller,
+      textInputAction: TextInputAction.newline,
+      obscureText: widget.obscureText,
+      decoration: InputDecoration(
+        hintText: widget.hintText,
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
+          borderRadius: const BorderRadius.all(Radius.circular(12.0)),
         ),
-        cursorColor: Theme.of(context).colorScheme.surfaceBright,
+        disabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
+          borderRadius: const BorderRadius.all(Radius.circular(12.0)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
+          borderRadius: const BorderRadius.all(Radius.circular(12.0)),
+        ),
+        fillColor: Theme.of(context).colorScheme.primary,
+        filled: true,
+        focusColor: Theme.of(context).colorScheme.surfaceBright,
+        hintStyle: TextStyle(
+          color: Theme.of(context).colorScheme.tertiary,
+        ),
       ),
+      cursorColor: Theme.of(context).colorScheme.surfaceBright,
     );
   }
 }
