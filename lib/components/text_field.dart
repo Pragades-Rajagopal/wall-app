@@ -21,6 +21,7 @@ class _MyTextFieldState extends State<MyTextField> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.translucent,
       onTap: () => setState(() => autoEdit = true),
       child: TextField(
         controller: widget.controller,

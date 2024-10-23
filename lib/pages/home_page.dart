@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:wall_app/components/appbar.dart';
@@ -28,8 +29,9 @@ class _HomePageState extends State<HomePage> {
   void postMessage() async {
     if (messageTextController.text.isNotEmpty) {
       _toggleSaveLoadingIndicator();
+      String? username = await Users(email: currentUser!.email!).getUsername();
       await UserPost().savePost(
-        currentUser?.email,
+        username,
         messageTextController.text,
       );
       setState(() {
@@ -59,7 +61,6 @@ class _HomePageState extends State<HomePage> {
                 stream: UserPost().getAllPosts(),
                 noDataMessage: '',
                 isDismissableAction: true,
-                optionalStream: Users().getAllUsernames(),
               ),
             ),
             Padding(
@@ -73,9 +74,7 @@ class _HomePageState extends State<HomePage> {
                       obscureText: false,
                     ),
                   ),
-                  const SizedBox(
-                    width: 8.0,
-                  ),
+                  const SizedBox(width: 8.0),
                   _showSaveLoadingIndicator
                       ? Container(
                           padding: const EdgeInsets.all(6),
@@ -106,6 +105,7 @@ class _HomePageState extends State<HomePage> {
               style: const TextStyle(color: Colors.grey),
               textAlign: TextAlign.center,
             ),
+            if (Platform.isIOS) ...{const SizedBox(height: 8.0)},
           ],
         ),
       ),

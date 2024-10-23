@@ -12,14 +12,12 @@ class MyStreamBuilder extends StatefulWidget {
   final String noDataMessage;
   final bool isDismissableAction;
   final String dismissAction;
-  final Stream<QuerySnapshot<Object?>> optionalStream;
   const MyStreamBuilder({
     super.key,
     required this.stream,
     required this.noDataMessage,
     this.isDismissableAction = false,
     this.dismissAction = 'saveUserPost',
-    this.optionalStream = const Stream.empty(),
   });
 
   @override
@@ -90,14 +88,7 @@ class _MyStreamBuilderState extends State<MyStreamBuilder> {
           );
         }
         if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
-          return StreamBuilder(
-              stream: Users(email: currentUser!.email).getAllUsernames(),
-              builder: (context, optSnapshot) {
-                if (optSnapshot.hasData) {
-                  return listViewBuilder(snapshot, optSnapshot);
-                }
-                return listViewBuilder(snapshot);
-              });
+          return listViewBuilder(snapshot);
         } else {
           return Center(
             child: Text(widget.noDataMessage),
@@ -108,23 +99,12 @@ class _MyStreamBuilderState extends State<MyStreamBuilder> {
   }
 
   ListView listViewBuilder(
-    AsyncSnapshot<QuerySnapshot<Object?>> snapshot, [
-    AsyncSnapshot<QuerySnapshot<Object?>>? optSnapshot,
-  ]) {
-    String? username;
-    List<String?> usernames = [];
+    AsyncSnapshot<QuerySnapshot<Object?>> snapshot,
+  ) {
     return ListView.builder(
       itemCount: snapshot.data!.docs.length,
       itemBuilder: (context, index) {
         final post = snapshot.data!.docs[index];
-        if (optSnapshot?.hasData == true) {
-          for (var e in optSnapshot!.data!.docs) {
-            if (e.id == post["email"]) {
-              username = e.get('username');
-              usernames.add(username!);
-            }
-          }
-        }
         if (widget.isDismissableAction) {
           return Dismissible(
             key: Key(post.id),
@@ -147,19 +127,13 @@ class _MyStreamBuilderState extends State<MyStreamBuilder> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => PostPage(
-                      postId: post.id,
-                      message: post["message"],
-                      user: usernames[index] ?? post["email"],
-                      time: getFormattedTime(post["time"]),
-                      likes: List<String>.from(post["likes"] ?? []),
-                    ),
+                    builder: (context) => postPageNavigation(post),
                   ),
                 );
               },
               child: WallPost(
                 message: post["message"],
-                user: username ?? post["email"],
+                user: post["email"],
                 time: post["time"],
                 postId: post.id,
                 likes: List<String>.from(post["likes"] ?? []),
@@ -172,19 +146,13 @@ class _MyStreamBuilderState extends State<MyStreamBuilder> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => PostPage(
-                    postId: post.id,
-                    message: post["message"],
-                    user: usernames[index] ?? post["email"],
-                    time: getFormattedTime(post["time"]),
-                    likes: List<String>.from(post["likes"] ?? []),
-                  ),
+                  builder: (context) => postPageNavigation(post),
                 ),
               );
             },
             child: WallPost(
               message: post["message"],
-              user: username ?? post["email"],
+              user: post["email"],
               time: post["time"],
               postId: post.id,
               likes: List<String>.from(post["likes"] ?? []),
@@ -192,6 +160,16 @@ class _MyStreamBuilderState extends State<MyStreamBuilder> {
           );
         }
       },
+    );
+  }
+
+  PostPage postPageNavigation(QueryDocumentSnapshot<Object?> post) {
+    return PostPage(
+      postId: post.id,
+      message: post["message"],
+      user: post["email"],
+      time: getFormattedTime(post["time"]),
+      likes: List<String>.from(post["likes"] ?? []),
     );
   }
 

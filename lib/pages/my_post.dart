@@ -34,7 +34,6 @@ class _MyPostState extends State<MyPost> {
                 noDataMessage: 'You have not posted yet!',
                 isDismissableAction: true,
                 dismissAction: 'deleteUserPost',
-                optionalStream: Users().getAllUsernames(),
               ),
             ),
           ],

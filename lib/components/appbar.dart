@@ -31,7 +31,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       centerTitle: true,
       backgroundColor:
-          Theme.of(context).appBarTheme.backgroundColor?.withOpacity(0.94),
+          Theme.of(context).appBarTheme.backgroundColor?.withOpacity(0.96),
       actions: showMoreOptions
           ? [
               PopupMenuButton(

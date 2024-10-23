@@ -93,6 +93,11 @@ class _ProfilePageState extends State<ProfilePage> {
         stream: Users(email: currentUser!.email!).getInfo(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+            if (snapshot.data!.data() == null) {
+              return const Center(
+                child: Text('User profile not found'),
+              );
+            }
             final userData = snapshot.data!.data() as Map<String, dynamic>;
             return ListView(
               padding: const EdgeInsets.all(12),
