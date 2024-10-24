@@ -133,7 +133,7 @@ class _MyStreamBuilderState extends State<MyStreamBuilder> {
               },
               child: WallPost(
                 message: post["message"],
-                user: post["email"],
+                user: post["username"] ?? post["email"],
                 time: post["time"],
                 postId: post.id,
                 likes: List<String>.from(post["likes"] ?? []),
@@ -152,7 +152,7 @@ class _MyStreamBuilderState extends State<MyStreamBuilder> {
             },
             child: WallPost(
               message: post["message"],
-              user: post["email"],
+              user: post["username"] ?? post["email"],
               time: post["time"],
               postId: post.id,
               likes: List<String>.from(post["likes"] ?? []),
@@ -167,7 +167,7 @@ class _MyStreamBuilderState extends State<MyStreamBuilder> {
     return PostPage(
       postId: post.id,
       message: post["message"],
-      user: post["email"],
+      user: post["username"] ?? post["email"],
       time: getFormattedTime(post["time"]),
       likes: List<String>.from(post["likes"] ?? []),
     );
@@ -181,7 +181,7 @@ class _MyStreamBuilderState extends State<MyStreamBuilder> {
           Radius.circular(8),
         ),
       ),
-      margin: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+      margin: const EdgeInsets.fromLTRB(12, 12, 0, 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [

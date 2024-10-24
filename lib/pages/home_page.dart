@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:wall_app/components/appbar.dart';
+import 'package:wall_app/components/common.dart';
 import 'package:wall_app/components/icon_button.dart';
 import 'package:wall_app/components/stream_builder.dart';
 import 'package:wall_app/components/text_field.dart';
@@ -28,16 +29,25 @@ class _HomePageState extends State<HomePage> {
 
   void postMessage() async {
     if (messageTextController.text.isNotEmpty) {
-      _toggleSaveLoadingIndicator();
-      String? username = await Users(email: currentUser!.email!).getUsername();
-      await UserPost().savePost(
-        username,
-        messageTextController.text,
-      );
-      setState(() {
-        messageTextController.text = '';
-      });
-      _toggleSaveLoadingIndicator();
+      try {
+        _toggleSaveLoadingIndicator();
+        String? username =
+            await Users(email: currentUser!.email!).getUsername();
+        await UserPost(email: currentUser!.email!).savePost(
+          username,
+          messageTextController.text,
+        );
+        setState(() {
+          messageTextController.text = '';
+        });
+        _toggleSaveLoadingIndicator();
+      } on FirebaseAuthException catch (error) {
+        if (mounted) {
+          Navigator.pop(context);
+          showSnackBar(context, error.code);
+        }
+        _toggleSaveLoadingIndicator();
+      }
     }
   }
 
@@ -59,7 +69,7 @@ class _HomePageState extends State<HomePage> {
             Expanded(
               child: MyStreamBuilder(
                 stream: UserPost().getAllPosts(),
-                noDataMessage: '',
+                noDataMessage: 'No posts yet!',
                 isDismissableAction: true,
               ),
             ),
@@ -80,7 +90,7 @@ class _HomePageState extends State<HomePage> {
                           padding: const EdgeInsets.all(6),
                           child: CircularProgressIndicator(
                             color: Theme.of(context).colorScheme.surfaceBright,
-                            strokeWidth: 4.0,
+                            strokeWidth: 2.0,
                           ),
                         )
                       : Container(

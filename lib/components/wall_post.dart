@@ -38,7 +38,7 @@ class _WallPostState extends State<WallPost> {
 
   void likePost() {
     setState(() => isLiked = !isLiked);
-    UserPost().likePost(widget.postId, currentUser!.email!, isLiked);
+    UserPost(email: currentUser!.email!).likePost(widget.postId, isLiked);
   }
 
   @override

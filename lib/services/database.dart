@@ -29,6 +29,7 @@ class Users {
     return userCollection.snapshots();
   }
 
+  /// Gets username for the email
   Future<String> getUsername() async {
     final userInfo = await userCollection.doc(email).get();
     if (userInfo.exists) {
@@ -46,10 +47,11 @@ class UserPost {
   UserPost({this.email});
 
   /// Saves post from the user
-  Future<void> savePost(String? userEmail, String message) async {
+  Future<void> savePost(String? username, String message) async {
     await userPostCollection.add({
       "message": message,
-      "email": userEmail ?? '',
+      "email": email ?? '',
+      "username": username,
       "time": Timestamp.now(),
       "likes": [],
     });
@@ -79,7 +81,7 @@ class UserPost {
   }
 
   /// Like an user post
-  void likePost(String postId, String email, bool isLiked) {
+  void likePost(String postId, bool isLiked) {
     DocumentReference docRef = userPostCollection.doc(postId);
     if (isLiked) {
       docRef.update({

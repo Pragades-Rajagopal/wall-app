@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+/// Converts Firestore Timestamp to `Oct 24, 18:15` format
 String getFormattedTime(Timestamp timestamp) {
   DateTime dateTime = timestamp.toDate();
   const List<String> months = [
@@ -18,7 +19,7 @@ String getFormattedTime(Timestamp timestamp) {
   ];
   int day = dateTime.day;
   String month = months[dateTime.month];
-  int hour = dateTime.hour;
-  int minute = dateTime.minute;
+  String hour = dateTime.hour.toString().padLeft(2, '0');
+  String minute = dateTime.minute.toString().padLeft(2, '0');
   return '$month $day, $hour:$minute';
 }
